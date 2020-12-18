@@ -9,6 +9,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+@app.route("/<string:name>/", methods=['GET'])
+def holleName(name):
+    return "Hi " + name + "! \nDocker is easy"
+
 @app.route('/', methods=['GET'])
 def query_records():
     # name = request.args.get('name')
