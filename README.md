@@ -1,2 +1,2 @@
 # DockerFlaskApp
-simple flask api in a Docker container
+A simple flask api in a Docker container
