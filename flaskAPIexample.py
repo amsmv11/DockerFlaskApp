@@ -5,9 +5,13 @@
 APP RUNS ON PORT 5000
 """
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, render_template
 
 app = Flask(__name__)
+
+@app.route("/redirect/", methods=['GET'])
+def redirectTest():
+    return redirect("https://www.google.com")
 
 @app.route("/<string:name>/", methods=['GET'])
 def helloName(name):
