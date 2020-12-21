@@ -10,8 +10,19 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 @app.route("/<string:name>/", methods=['GET'])
-def holleName(name):
+def helloName(name):
     return "Hi " + name + "! \nDocker is easy"
+
+@app.route("/repeatName/<string:name>/<int:nr>/", methods=['GET', 'POST'])
+def helloNameTimesNr(name, nr):
+    response = ""
+    if request.method == "POST":
+        response += "POST METHOD\n"
+    else:
+        response += request.method + "\n"
+    for i in range(nr):
+        response += "Hello " + name +"!\n"
+    return jsonify({'response':response})
 
 @app.route('/', methods=['GET'])
 def query_records():
