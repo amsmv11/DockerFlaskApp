@@ -39,7 +39,12 @@ def query_records():
     #         if record['name'] == name:
     #             return jsonify(record)
     #     return jsonify({'error': 'data not found'})
-    return "Docker is easy"
+    return "<h1>Flask API<h1><br>"\
+            "<ul>"\
+                "<li>/name/</li>"\
+                "<li>/repeatName/name/nr_of_times/</li>"\
+                "<li>/redirect/  (goes to google)</li>"\
+                
 
 @app.route('/', methods=['PUT'])
 def create_record():
