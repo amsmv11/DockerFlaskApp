@@ -6,8 +6,65 @@ APP RUNS ON PORT 5000
 """
 import json
 from flask import Flask, request, jsonify, redirect, render_template
+import sqlite3
+import hashlib
 
 app = Flask(__name__)
+
+
+
+
+
+@app.route("/users/<string:name>/<string:password>/", methods=['POST'])
+def createUser(name, password):
+    if name != "" and password != "":
+        name = name.replace("<", "")
+        name = name.replace(">", "")
+        name = name.replace("script", "")
+        name = name.replace("=", "")
+        name = name.replace(";", "")
+        name = name.replace(":", "")
+
+        result = hashlib.md5(password.encode()) 
+        res = result.hexdigest()
+
+        conn = sqlite3.connect("users.db")
+        c = conn.cursor()
+        c.execute("INSERT INTO users (username, password) VALUES (?,?)", (name, res))
+        conn.commit()
+        conn.close()
+        return redirect("/users/list")
+    else:
+        return "<h1>ERROR: username and password missing</h1>"
+
+
+@app.route("/users/list/", methods=['GET'])
+def listUsers():
+    res = "<h1>List of all users</h1> <br> <ul>"
+
+    conn = sqlite3.connect("users.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM users")
+    conn.commit()
+    query = c.fetchall()
+    conn.close()
+
+    if query != []:
+        for id, user, password in query:
+            user = user.replace("<", "")
+            user = user.replace(">", "")
+            user = user.replace("script", "")
+            user = user.replace("=", "")
+            user = user.replace(";", "")
+            user = user.replace(":", "")
+            res += "<li> Username: " + user + " <br> Password: " + password + "</li>"
+
+    else:
+        res += "<li>EMPTY_LIST</li>"
+
+    res += "</ul>"
+    return res
+
 
 @app.route("/redirect/", methods=['GET'])
 def redirectTest():
@@ -44,6 +101,8 @@ def query_records():
                 "<li>/name/</li>"\
                 "<li>/repeatName/name/nr_of_times/</li>"\
                 "<li>/redirect/  (goes to google)</li>"\
+                "<li>/users/create/name/password</li>"\
+                "<li>/users/list</li>"\
                 
 
 @app.route('/', methods=['PUT'])
