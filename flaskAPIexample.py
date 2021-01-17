@@ -15,8 +15,18 @@ app = Flask(__name__)
 
 
 
-@app.route("/users/<string:name>/<string:password>/", methods=['POST'])
-def createUser(name, password):
+@app.route("/get/", methods=['POST'])
+def getParameters():
+    dict_request = request.get_json(force=True)
+
+    return dict_request
+
+
+@app.route("/users/", methods=['POST'])
+def createUser():
+    dict_request = request.get_json(force=True)
+    name = str(dict_request["username"])
+    password = str(dict_request["password"])
     if name != "" and password != "":
         name = name.replace("<", "")
         name = name.replace(">", "")
@@ -101,7 +111,7 @@ def query_records():
                 "<li>/name/</li>"\
                 "<li>/repeatName/name/nr_of_times/</li>"\
                 "<li>/redirect/  (goes to google)</li>"\
-                "<li>/users/create/name/password</li>"\
+                "<li>/users/   POST(username:string, password:string)</li>"\
                 "<li>/users/list</li>"\
                 
 
